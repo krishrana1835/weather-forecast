@@ -78,3 +78,20 @@
   border: none;
   outline: none;
 }
+
+.image-anime {
+  animation: animationX 3s ease-in-out infinite;
+  transition: all 3s ease;
+}
+
+@keyframes animationX {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

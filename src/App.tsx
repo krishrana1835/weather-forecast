@@ -4,6 +4,8 @@ import Home from "./Pages/Home";
 import Search from "./Pages/Search";
 import { useEffect, useState } from "react";
 import { fetchWeather } from "./api/weatherApi";
+import 'aos/dist/aos.css';
+import AOS from 'aos';
 
 interface Location {
   city: string;
@@ -37,6 +39,11 @@ function App() {
     } else {
       console.warn("Geolocation is not supported by this browser.");
     }
+
+    AOS.init({
+      duration: 500,
+      once: false,
+    });
   }, []);
 
   // Fetch weather data when location changes

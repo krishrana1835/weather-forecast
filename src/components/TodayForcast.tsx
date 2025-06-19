@@ -30,7 +30,7 @@ function TodayForecast({ lat, lon, data }: Props) {
       <p className="d-flex justify-content-start">NEXT 24 HOURS</p>
       <div className="forecast-row">
         {weatherData.map((info, index) => (
-          <div key={index} className="forecast-item text-center">
+          <div key={index} className="forecast-item text-center" data-aos="zoom-in">
             <p className="info m-0">
               {info.time.split(" ")[1].split(":")[0]}:00
             </p>

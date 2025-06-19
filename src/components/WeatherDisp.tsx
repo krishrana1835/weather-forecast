@@ -32,7 +32,7 @@ function WeatherDisp({ city, main, temprature, data }: Props) {
         <h1 className="mt-3">{temprature}°</h1>
       </div>
       <div className="col">
-        <img src={`/${main}${getDayOrNight(data)}.png`} alt="" />
+        <img src={`/${main}${getDayOrNight(data)}.png`} alt="" className="image-anime"/>
       </div>
     </div>
   );
