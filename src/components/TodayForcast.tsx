@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { fetchTodayForecast } from "../api/weatherApi";
-import { getDayOrNight } from "./WeatherDisp";
 
 interface Props {
   lat: number;
