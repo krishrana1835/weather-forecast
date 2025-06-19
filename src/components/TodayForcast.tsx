@@ -45,8 +45,7 @@ function TodayForecast({ lat, lon, data }: Props) {
               alt=""
               height="50"
               width="50"
-              className="my-2"
-            />
+              className="my-2"/>
             <p className="info m-0">{info.temperature}°</p>
           </div>
         ))}
