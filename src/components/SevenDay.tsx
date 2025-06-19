@@ -38,6 +38,7 @@ function formatWeatherCode(code: string): string {
     ash: "Ash",
     squall: "Squall",
     tornado: "Tornado",
+    lightrainshowers: "LightRain"
   };
 
   const normalizedCode = code.toLowerCase().replace(/_(day|night)$/, "");
