@@ -27,7 +27,7 @@ function TodayForecast({lat, lon, data}: Props) {
 
   return (
     <div className="w-100 component-bg todayforcast p-3">
-      <p className="d-flex justify-content-start">NEXT 24HOURS FORECAST</p>
+      <p className="d-flex justify-content-start">NEXT 24 HOURS</p>
       <div className="forecast-row">
         {weatherData.map((info, index) => (
           <div key={index} className="forecast-item text-center">
