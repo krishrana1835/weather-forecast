@@ -46,7 +46,7 @@ function formatWeatherCode(code: string): string {
 
 function RowComponent({ day, weather, num1, num2 }: RowData) {
   return (
-    <div className="row justify-content-between align-items-center text-white mb-4" data-aos="fade-right">
+    <div className="row justify-content-between align-items-center text-white mb-4">
       <p className="info m-0 col-4">{day}</p>
       <p className="text-light m-0 col-4 d-flex justify-content-center">
         <img
