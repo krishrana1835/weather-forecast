@@ -1,8 +1,10 @@
 
 # 🌤️ React Weather Forecast App
 
-A modern weather forecast application built using **React** and **TypeScript**, featuring:
+A modern weather forecast application built using **React** and **TypeScript**.
+<br/>
 https://weather-forecast-reactapp.vercel.app/
+<br/>featuring:
 
 - Current weather conditions
 - Next 24-hour forecast
