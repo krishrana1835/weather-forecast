@@ -128,7 +128,7 @@ export async function fetchSimpleForecast(lat: number, lon: number): Promise<Wea
 
     grouped[date].temps.push(temp);
 
-    // If we don't have a symbol yet, and it's 12:00 or later, set it
+    
     if (code && hour >= 12 && !grouped[date].afterNoonSymbol) {
       grouped[date].afterNoonSymbol = code;
     }
