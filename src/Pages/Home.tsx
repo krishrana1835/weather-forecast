@@ -4,7 +4,7 @@ import TodayForcast from "../components/TodayForcast";
 import WeatherDisp from "../components/WeatherDisp";
 
 
-function Home({data, location}: any) {
+function Home({data, location}: Readonly<any>) {
   if (!data || !data?.weather || !data?.main) {
     return (
       <div className="container text-center text-white mt-5">

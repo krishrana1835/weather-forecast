@@ -7,7 +7,7 @@ interface Props {
   data: any;
 }
 
-function TodayForecast({ lat, lon, data }: Props) {
+function TodayForecast({ lat, lon, data }: Readonly<Props>) {
   const [weatherData, setWeatherData] = useState<
     { time: string; weather: string; temperature: number }[]
   >([]);

@@ -45,7 +45,7 @@ function formatWeatherCode(code: string): string {
   return map[normalizedCode] ?? (code.charAt(0).toUpperCase() + code.slice(1).toLowerCase());
 }
 
-function RowComponent({ day, weather, num1, num2 }: RowData) {
+function RowComponent({ day, weather, num1, num2 }: Readonly<RowData>) {
   return (
     <div className="row justify-content-between align-items-center text-white mb-4">
       <p className="info m-0 col-4">{day}</p>
@@ -60,7 +60,7 @@ function RowComponent({ day, weather, num1, num2 }: RowData) {
         {weather}
       </p>
       <div className="info d-flex flex-row align-items-center col-4 justify-content-end">
-        <span className="info">{num1}°</span>-<span className="info">{num2}°</span>
+        <p className="info">{num1}°-</p><p className="info">{num2}°</p>
       </div>
     </div>
   );
@@ -71,7 +71,7 @@ interface Props {
   lon: number;
 }
 
-function SevenDay({ lat, lon }: Props) {
+function SevenDay({ lat, lon }: Readonly<Props>) {
   const [weatherData, setWeatherData] = useState<any>(null);
 
   useEffect(() => {

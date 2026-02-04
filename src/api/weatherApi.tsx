@@ -23,7 +23,7 @@ export async function fetchTodayForecast(lat: number, lon: number) {
     const res = await axios.get(url);
     const list = res.data.list;
 
-    const now = new Date().getTime();
+    const now = Date.now();
     const plus24h = now + 24 * 60 * 60 * 1000;
 
     const todayForecasts = list.filter((item: any) => {
