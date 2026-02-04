@@ -29,15 +29,15 @@ function TodayForecast({ lat, lon, data }: Props) {
     <div className="w-100 component-bg todayforcast p-3">
       <p className="d-flex justify-content-start">NEXT 24 HOURS</p>
       <div className="forecast-row">
-        {weatherData.map((info, index) => (
-          <div key={index} className="forecast-item text-center" data-aos="zoom-in">
+        {weatherData.map((info) => (
+          <div key={info.time} className="forecast-item text-center" data-aos="zoom-in">
             <p className="info m-0">
               {info.time.split(" ")[1].split(":")[0]}:00
             </p>
             <img
               src={`/${data.weather[0].main}${
-                parseInt(info.time.split(" ")[1].split(":")[0], 10) > 6 &&
-                parseInt(info.time.split(" ")[1].split(":")[0], 10) < 19
+                Number.parseInt(info.time.split(" ")[1].split(":")[0], 10) > 6 &&
+                Number.parseInt(info.time.split(" ")[1].split(":")[0], 10) < 19
                   ? "day"
                   : "night"
               }.png`}

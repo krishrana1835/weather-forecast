@@ -60,8 +60,7 @@ function RowComponent({ day, weather, num1, num2 }: RowData) {
         {weather}
       </p>
       <div className="info d-flex flex-row align-items-center col-4 justify-content-end">
-        <span className="info">{num1}°</span>-
-        <span className="info">{num2}°</span>
+        <span className="info">{num1}°</span>-<span className="info">{num2}°</span>
       </div>
     </div>
   );
@@ -104,9 +103,9 @@ function SevenDay({ lat, lon }: Props) {
         num2={Math.round(weatherData.current.maxTemp)}
       />
 
-      {weatherData.daily.slice(1).map((day: any, index: number) => (
+      {weatherData.daily.slice(1).map((day: any) => (
         <RowComponent
-          key={index}
+          key={day.date}
           day={new Date(day.date).toLocaleDateString("en-US", {
             weekday: "long",
           })}
