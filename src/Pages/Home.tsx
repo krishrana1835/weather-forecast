@@ -9,7 +9,7 @@ interface Props{
 }
 
 function Home({data, location}: Props) {
-  if (!data || !data?.weather || !data?.main) {
+  if (!data?.weather || !data?.main) {
     return (
       <div className="container text-center text-white mt-5">
         <h4>Loading weather data...</h4>
