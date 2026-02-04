@@ -49,9 +49,9 @@ function Search({setCity}: any) {
 
       {suggestions.length > 0 && (
         <div className="suggestion-list d-flex justify-content-center align-items-center flex-column">
-          {suggestions.map((city, index) => (
+          {suggestions.map((city) => (
             <div
-              key={index}
+              key={city.lat + city.lon}
               onClick={() => handleSelect(city)}
               className="suggestion-item text-white p-2 m-2 w-75 component-bg d-flex justify-content-start align-items-center"
               style={{ cursor: "pointer" }}
