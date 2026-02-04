@@ -1,10 +1,10 @@
 interface Props {
-  rf: number;
-  wind: number;
-  humidity: number;
+  readonly rf: number;
+  readonly wind: number;
+  readonly humidity: number;
 }
 
-function AirConditions({ rf, wind, humidity }: Readonly<Props>) {
+function AirConditions({ rf, wind, humidity }: Props) {
   return (
     <div className="w-100 component-bg air-con">
       <p className="d-flex justify-content-start p-3">AIR CONDITONS</p>

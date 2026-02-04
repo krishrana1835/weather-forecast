@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { fetchSimpleForecast } from "../api/weatherApi";
 
 interface RowData {
-  day: string;
-  weather: string;
-  num1: number;
-  num2: number;
+  readonly day: string;
+  readonly weather: string;
+  readonly num1: number;
+  readonly num2: number;
 }
 
 function formatWeatherCode(code: string): string {
@@ -45,7 +45,7 @@ function formatWeatherCode(code: string): string {
   return map[normalizedCode] ?? (code.charAt(0).toUpperCase() + code.slice(1).toLowerCase());
 }
 
-function RowComponent({ day, weather, num1, num2 }: Readonly<RowData>) {
+function RowComponent({ day, weather, num1, num2 }: RowData) {
   return (
     <div className="row justify-content-between align-items-center text-white mb-4">
       <p className="info m-0 col-4">{day}</p>
@@ -67,11 +67,11 @@ function RowComponent({ day, weather, num1, num2 }: Readonly<RowData>) {
 }
 
 interface Props {
-  lat: number;
-  lon: number;
+  readonly lat: number;
+  readonly lon: number;
 }
 
-function SevenDay({ lat, lon }: Readonly<Props>) {
+function SevenDay({ lat, lon }: Props) {
   const [weatherData, setWeatherData] = useState<any>(null);
 
   useEffect(() => {

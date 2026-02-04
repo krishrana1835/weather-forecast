@@ -3,8 +3,12 @@ import SevenDay from "../components/SevenDay";
 import TodayForcast from "../components/TodayForcast";
 import WeatherDisp from "../components/WeatherDisp";
 
+interface Props{
+  readonly data: any;
+  readonly location : any;
+}
 
-function Home({data, location}: Readonly<any>) {
+function Home({data, location}: Props) {
   if (!data || !data?.weather || !data?.main) {
     return (
       <div className="container text-center text-white mt-5">

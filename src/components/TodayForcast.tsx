@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { fetchTodayForecast } from "../api/weatherApi";
 
 interface Props {
-  lat: number;
-  lon: number;
-  data: any;
+  readonly lat: number;
+  readonly lon: number;
+  readonly data: any;
 }
 
-function TodayForecast({ lat, lon, data }: Readonly<Props>) {
+function TodayForecast({ lat, lon, data }: Props) {
   const [weatherData, setWeatherData] = useState<
     { time: string; weather: string; temperature: number }[]
   >([]);

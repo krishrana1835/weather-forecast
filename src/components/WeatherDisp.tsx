@@ -8,14 +8,14 @@ interface Props {
 }
 
 interface WeatherData {
-  sys: {
+  readonly sys: {
     sunrise: number;
     sunset: number;
   };
-  dt: number;
+  readonly dt: number;
 }
 
-export const getDayOrNight = (weatherData: Readonly<WeatherData>): "day" | "night" => {
+export const getDayOrNight = (weatherData: WeatherData): "day" | "night" => {
   const { sunrise, sunset } = weatherData.sys;
   const currentTime = weatherData.dt;
 
