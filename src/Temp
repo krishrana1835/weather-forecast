@@ -1,0 +1,97 @@
+private int calculateDynamicPriority(UserGameStats stat) {
+
+    int priority = stat.getPriorityScore();
+
+    if (stat.getLastPlayedAt() == null) {
+        return priority + 100;
+    }
+
+    long days = ChronoUnit.DAYS.between(
+            stat.getLastPlayedAt(),
+            ZonedDateTime.now()
+    );
+
+    priority += days * 10;
+
+    // penalty if played today
+    if (stat.getLastPlayedAt()
+            .toLocalDate()
+            .equals(LocalDate.now())) {
+        priority -= 40;
+    }
+
+    return priority;
+}
+private void validateGroupPriority(List<Long> userIds, Long gameId) {
+
+    List<UserGameStats> stats =
+            statsRepo.findByUserIdsAndGame(userIds, gameId);
+
+    List<Integer> priorities = new ArrayList<>();
+
+    for (UserGameStats stat : stats) {
+        int priority = calculateDynamicPriority(stat);
+        priorities.add(priority);
+    }
+
+    double avg = priorities.stream()
+            .mapToInt(i -> i)
+            .average()
+            .orElse(0);
+
+    int max = Collections.max(priorities);
+    int min = Collections.min(priorities);
+
+    if (avg < 30) {
+        throw new RuntimeException("Group priority too low");
+    }
+
+    if ((max - min) > 40) {
+        throw new RuntimeException("Unfair group combination");
+    }
+}
+@Service
+@RequiredArgsConstructor
+public class BookingService {
+
+    private final GameSlotRepository slotRepo;
+    private final UserGameStatsRepository statsRepo;
+    private final FinalBookingRepository bookingRepo;
+
+    @Transactional
+    public void bookSlot(Long slotId, List<Long> userIds) {
+
+        GameSlots slot = slotRepo.findById(slotId)
+                .orElseThrow(() -> new RuntimeException("Slot not found"));
+
+        // 15 min rule
+        if (ZonedDateTime.now()
+                .isAfter(slot.getStartTime().minusMinutes(15))) {
+            throw new RuntimeException("Booking closed");
+        }
+
+        if (slot.getStatus() != GameSlots.SlotStatus.OPEN) {
+            throw new RuntimeException("Slot not available");
+        }
+
+        // Active booking check
+        for (Long userId : userIds) {
+            boolean hasActive = bookingRepo.existsActiveBooking(userId);
+            if (hasActive) {
+                throw new RuntimeException("User has active booking");
+            }
+        }
+
+        // Priority validation
+        validateGroupPriority(userIds, slot.getGameConfig().getGameId());
+
+        // Create booking
+        FinalBookings booking = new FinalBookings();
+        booking.setGameSlot(slot);
+        booking.setCompleted(false);
+
+        slot.setStatus(GameSlots.SlotStatus.PROCESSING);
+
+        bookingRepo.save(booking);
+    }
+}
