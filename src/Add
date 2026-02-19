@@ -1,0 +1,174 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { useForm } from "react-hook-form";
+import { notify } from "./Notification";
+
+interface Props {
+  user: { userId: number; name: string };
+  travelingUsers: any[];
+  setTravelingUsers: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+export default function AddTravelingUserDialog({
+  user,
+  travelingUsers,
+  setTravelingUsers,
+}: Props) {
+  const { register, handleSubmit } = useForm({
+    defaultValues: { travelBalance: 0 },
+  });
+
+  const onSubmit = (data: any) => {
+    if (travelingUsers.some((u) => u.userId === user.userId)) {
+      notify.info("User already added");
+      return;
+    }
+
+    setTravelingUsers([
+      ...travelingUsers,
+      { userId: user.userId, travelBalance: data.travelBalance },
+    ]);
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Add</Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogHeader>
+            <DialogTitle>Add {user.name}</DialogTitle>
+          </DialogHeader>
+
+          <Input
+            type="number"
+            min={0}
+            {...register("travelBalance", { required: true })}
+            placeholder="Travel balance"
+          />
+
+          <DialogFooter>
+            <Button type="submit">Confirm</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import api from "@/api/api";
+import { notify } from "./Notification";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
+import { useDebounce } from "@/hook/DebounceHoot";
+import AddTravelingUserDialog from "./AddTravelingUserDialog";
+
+interface IUserList {
+  userId: number;
+  name: string;
+  email: string;
+}
+
+interface User {
+  userId: number;
+  travelBalance: number;
+}
+
+export default function AddUserToTravel() {
+  const { travelId } = useParams();
+  const [search, setSearch] = useState("");
+  const [userList, setUserList] = useState<IUserList[]>([]);
+  const [travelingUsers, setTravelingUsers] = useState<User[]>([]);
+
+  const debouncedSearch = useDebounce(search, 500);
+
+  /* ---------------- SEARCH USERS ---------------- */
+  useEffect(() => {
+    if (debouncedSearch.length < 2) {
+      setUserList([]);
+      return;
+    }
+
+    api
+      .get(`/users/list?name=${debouncedSearch}`)
+      .then((res) => setUserList(res.data))
+      .catch(() => notify.error("Error", "Failed to fetch users"));
+  }, [debouncedSearch]);
+
+  /* ---------------- SUBMIT USERS ---------------- */
+  const addUsersMutation = useMutation({
+    mutationFn: () =>
+      api.post("/travel/traveling-user", {
+        travelId: Number(travelId),
+        users: travelingUsers,
+      }),
+    onSuccess: () => {
+      notify.success("Success", "Users added to travel");
+      setTravelingUsers([]);
+    },
+    onError: (err: any) => {
+      notify.error("Error", err?.response?.data?.message || "Something went wrong");
+    },
+  });
+
+  return (
+    <div className="space-y-4">
+
+      {/* Search */}
+      <Input
+        placeholder="Search users..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      {/* User search results */}
+      {userList.map((user) => (
+        <Card key={user.userId} className="p-3 flex justify-between items-center">
+          <div>
+            <p className="font-semibold">{user.name}</p>
+            <p className="text-sm text-gray-500">{user.email}</p>
+          </div>
+
+          <AddTravelingUserDialog
+            user={user}
+            travelingUsers={travelingUsers}
+            setTravelingUsers={setTravelingUsers}
+          />
+        </Card>
+      ))}
+
+      {/* Selected users */}
+      {travelingUsers.length > 0 && (
+        <>
+          <h3 className="font-bold text-lg">Selected Users</h3>
+
+          {travelingUsers.map((u) => (
+            <Card key={u.userId} className="p-2 bg-gray-100">
+              User ID: {u.userId} — Balance: ₹{u.travelBalance}
+            </Card>
+          ))}
+
+          <Button
+            onClick={() => addUsersMutation.mutate()}
+            disabled={addUsersMutation.isPending}
+          >
+            {addUsersMutation.isPending ? "Saving..." : "Add Users to Travel"}
+          </Button>
+        </>
+      )}
+    </div>
+  );
+}
